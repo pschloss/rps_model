@@ -46,9 +46,8 @@ get_neighborhood <- function(row, col){
 
 compete <- function(state, neighbors){
 
-	neighbor_count <- table(factor(neighbors, levels=1:nrow(interaction)))
-	probability <- interaction[state, 1] +
-														sum(interaction[state,-1] * neighbor_count)
+	f_neighbors <- table(factor(neighbors, levels=1:nrow(interaction)))/length(neighbors)
+	probability <- interaction[state, 1] + sum(interaction[state,-1] * f_neighbors)
 	ifelse(runif(1) < probability, 0, state)
 }
 
