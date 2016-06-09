@@ -81,11 +81,8 @@ n_cells <- length(environment)
 
 for(i in 1:1000){
 	#one epoch...
-	orig_environment <- environment
 	rand_row <- sample(1:n_rows, n_cells, replace=T)
 	rand_col <- sample(1:n_cols, n_cells, replace=T)
 	apply(cbind(rand_row, rand_col), 1, update_focus_state)
 
-#	print(sum(orig_environment != environment))
-	if(i %% 100 == 0) print(i)
 }
