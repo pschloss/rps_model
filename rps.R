@@ -15,7 +15,7 @@ fill_environment <- function(counts, n_cells = sum(counts)){
 }
 
 
-get_neighborhood <- function(row, column){
+get_neighborhood <- function(row, col){
 
 	n_rows <- nrow(environment)
 	n_cols <- ncol(environment)
@@ -32,9 +32,9 @@ get_neighborhood <- function(row, column){
 
 	cols <- rep(NA, 3)
 
-	if(column != 1 & column != n_cols){
-		cols <- (column-1) : (column+1)
-	} else if(column == 1){
+	if(col != 1 & col != n_cols){
+		cols <- (col-1) : (col+1)
+	} else if(col == 1){
 		cols <- c(n_cols, 1, 2)
 	} else {
 		cols <- c(n_cols-1, n_cols, 1)
@@ -53,10 +53,10 @@ compete <- function(state, neighbors){
 }
 
 
-update_focus_state <- function(row, col){
+update_focus_state <- function(row_col){
 
-	row <- rand_row[1]
-	col <- rand_col[2]
+	row <- row_col[1]
+	col <- row_col[2]
 
 	focus_state <- environment[row, col]
 	neighborhood <- get_neighborhood(row, col)
@@ -66,27 +66,26 @@ update_focus_state <- function(row, col){
 	} else {
 		environment[row, col] <<- sample(neighborhood, 1)
 	}
-
 }
 
 interaction <- matrix(c(10/32,	0,	0,		0,
 								 				1/4,		0,	0,	3/4,
 								 				1/3,		0,	0,		0), nrow=3, byrow=T)
 
-counts <- c(50,50,50)
-environment <- fill_environment(counts, n_cells=150*150)
-orig_environment <- environment
+counts <- c(20,20,20)
+environment <- fill_environment(counts)
 
 n_rows <- nrow(environment)
 n_cols <- ncol(environment)
 n_cells <- length(environment)
 
-
-for(i in 1:3){
+for(i in 1:1000){
 	#one epoch...
+	orig_environment <- environment
 	rand_row <- sample(1:n_rows, n_cells, replace=T)
 	rand_col <- sample(1:n_cols, n_cells, replace=T)
-	mapply(update_focus_state, row=rand_row, col=rand_col)
+	apply(cbind(rand_row, rand_col), 1, update_focus_state)
 
-	if(i %% 10 == 0){print(i)}
+#	print(sum(orig_environment != environment))
+	if(i %% 100 == 0) print(i)
 }
