@@ -21,7 +21,7 @@ fill_environment <- function(counts, n_cells = sum(counts)){
 
 interaction <- matrix(c(0, 0, 0, 0, 0, 3/4, 0, 0, 0), nrow=3, byrow=T)
 base_probs <- c(10/32, 1/4, 1/3)
-counts <- c(10,10,10)
+counts <- c(20,20,20)
 environment <- fill_environment(counts)
 orig_environment <- environment
 
