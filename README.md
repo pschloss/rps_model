@@ -43,3 +43,13 @@ benchmark(source('rps.R'), replications=1)
 #1 source("rps.R")            1   5.438        1      5.43    0.007          0
 #  sys.child
 #1         0
+
+
+#rcpp
+#03c54225994fd31556a5b4ee8b363f600b46f893
+library(rbenchmark)
+benchmark(source('rock_paper_scissors.R'), replications=1)
+#                             test replications elapsed relative user.self
+#1 source("rock_paper_scissors.R")            1   0.038        1     0.035
+#  sys.self user.child sys.child
+#1    0.002          0         0
