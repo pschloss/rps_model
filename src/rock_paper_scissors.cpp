@@ -2,6 +2,8 @@
 using namespace Rcpp;
 
 
+// [[Rcpp::export]]
+
 int compete(int state, IntegerVector neighbors, NumericVector base_prob, NumericMatrix interaction) {
 
 	NumericVector frequency(base_prob.length()+1, 0);
@@ -11,8 +13,9 @@ int compete(int state, IntegerVector neighbors, NumericVector base_prob, Numeric
 	}
 
 	for(int i=0;i<frequency.size();i++){
-		frequency(i) = frequency(i) / ((double)neighbors.size()-1);
+		frequency(i) = frequency(i) / ((double)neighbors.size());
 	}
+
 	float probability = base_prob(state-1);
 
 	for(int i=0;i<interaction.ncol();i++){
@@ -20,11 +23,11 @@ int compete(int state, IntegerVector neighbors, NumericVector base_prob, Numeric
 		probability += interaction(state-1, i) * frequency(i+1);
 	}
 	// Rcout << "------\n";
-
 	if(runif(1)(0) < probability){	state = 0;	}
 
 	return(state);
 }
+
 
 // [[Rcpp::export]]
 
@@ -34,6 +37,7 @@ int rand_range(int min, int max){
 	return(rand_number);
 }
 
+
 // [[Rcpp::export]]
 
 int give_birth(IntegerVector neighbors){
@@ -41,13 +45,17 @@ int give_birth(IntegerVector neighbors){
 	return neighbors(rand_number);
 }
 
+
 // [[Rcpp::export]]
 
 IntegerVector get_global_neighborhood(IntegerMatrix& grid, int row, int column){
 	IntegerVector neighborhood(grid);
+	neighborhood.erase(column * grid.nrow() + row);
 	return neighborhood;
 }
 
+
+// [[Rcpp::export]]
 
 IntegerVector get_local_neighborhood(IntegerMatrix grid, int row, int column){
 //http://stackoverflow.com/questions/18964603/finding-neighbourhood-in-matrices
@@ -77,11 +85,13 @@ IntegerVector get_local_neighborhood(IntegerMatrix grid, int row, int column){
 // [[Rcpp::export]]
 
 IntegerMatrix rock_paper_scissors(IntegerMatrix grid, int n_epochs,
- 						NumericVector base_probs, NumericMatrix interaction) {
+ 						NumericVector base_probs, NumericMatrix interaction, int local) {
 
 	int n_bugs = interaction.nrow() + 1;
 	n_epochs++;
 	IntegerMatrix count_matrix(n_epochs, n_bugs);
+
+	IntegerVector neighborhood;
 
 	for(int i=0;i<n_bugs;i++){
 		count_matrix(0,i) = sum(grid==i);
@@ -95,9 +105,11 @@ IntegerMatrix rock_paper_scissors(IntegerMatrix grid, int n_epochs,
 			int rand_row = rand_range(0,grid.nrow());
 			int rand_col = rand_range(0,grid.ncol());
 
-			IntegerVector neighborhood = get_global_neighborhood(grid, rand_row, rand_col);
-			//IntegerVector neighborhood = get_local_neighborhood(grid, rand_row, rand_col);
-
+			if(local == 0){
+				neighborhood = get_global_neighborhood(grid, rand_row, rand_col);
+			} else {
+				neighborhood = get_local_neighborhood(grid, rand_row, rand_col);
+			}
 
 			int status = grid(rand_row, rand_col);
 
@@ -112,7 +124,7 @@ IntegerMatrix rock_paper_scissors(IntegerMatrix grid, int n_epochs,
 		for(int j=0;j<n_bugs;j++){
 			count_matrix(i,j) = sum(grid==j);
 		}
-			Rcout << grid << std::endl << std::endl;
+			// Rcout << grid << std::endl << std::endl;
 
 		if(i % 100 == 0)	{
 			Rcout << i << std::endl;
