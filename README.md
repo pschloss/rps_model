@@ -24,32 +24,3 @@
 #sensitive = 2
 #colicin = 3
 #empty = 0
-
-#original
-#f9b94e18164fd5fb2159391335284ba55440dce2
-library(rbenchmark)
-benchmark(source('rps.R'), replications=1)
-#             test replications elapsed relative user.self sys.self user.child
-#1 source("rps.R")            1   5.512        1     5.505    0.006          0
-#  sys.child
-#1         0
-
-
-#synchronus
-#7b1917b661c36c4132b125f8b7cd267b780bad21
-library(rbenchmark)
-benchmark(source('rps.R'), replications=1)
-#             test replications elapsed relative user.self sys.self user.child
-#1 source("rps.R")            1   5.438        1      5.43    0.007          0
-#  sys.child
-#1         0
-
-
-#rcpp
-#03c54225994fd31556a5b4ee8b363f600b46f893
-library(rbenchmark)
-benchmark(source('rock_paper_scissors.R'), replications=1)
-#                             test replications elapsed relative user.self
-#1 source("rock_paper_scissors.R")            1   0.038        1     0.035
-#  sys.self user.child sys.child
-#1    0.002          0         0
