@@ -7,17 +7,6 @@ n_epochs <- 4000
 n_rows <- 250
 n_cols <- 250
 
-#  set.seed(1)	#				100/100 250/250
-#  set.seed(2) #								250/250
-#  set.seed(3)	#	50/50					250/250
-#  set.seed(4) #								250/250xxx
-#  set.seed(5) #								250/250
-#  set.seed(6)	#
-#  set.seed(7) #								250/250
-#  set.seed(8) #								250/250 25/25
-#  set.seed(9)	#
-# set.seed(10)	#				100/100
-
 environment <- fill_environment(nrow=n_rows, ncol=n_cols, freq=c(1/4,1/4,1/4,1/4))
 
 bug_counts <- rock_paper_scissors(environment, n_epochs, base_probs, interaction, local=1)
