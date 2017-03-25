@@ -12,7 +12,7 @@ environment <- fill_environment(nrow=n_rows, ncol=n_cols,
 
 bug_counts <- rock_paper_scissors(environment, n_epochs, base_probs,
 																									interaction, local=1)
-
+png("time_course.png")
 par(mar=c(5,4,1,1))
 plot(log10(bug_counts[,2]+1), type="l", col="green",
 													ylim=c(0,log10(n_rows*n_cols)),
@@ -21,8 +21,11 @@ points(log10(bug_counts[,3]+1), type="l", col="blue")
 points(log10(bug_counts[,4]+1), type="l", col="red")
 legend("bottomright", legend=c("Resistant", "Sensitive", "Colicin"),
 											col=c("green", "blue", "red"), lty=1, lwd=2)
+dev.off()
 
 tail(bug_counts)
 
+png("map.png")
 par(mar=c(1,1,1,1))
 image(environment, axes=F, col=c("white", "green", "blue", "red"))
+dev.off()
